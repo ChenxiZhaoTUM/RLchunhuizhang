@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 from matplotlib import animation
 
 
-def display_frame_to_video(frames):
+def display_frame_to_video(frames, output):
     plt.figure(figsize=(frames[0].shape[0] / 72, frames[0].shape[1] / 72), dpi=72)  # length/72, width/72, const dpi
     plt.axis('off')
     patch = plt.imshow(frames[0])
@@ -11,8 +11,7 @@ def display_frame_to_video(frames):
         patch.set_data(frames[i])
 
     anim = animation.FuncAnimation(plt.gcf(), animate, frames=range(len(frames)), interval=50)  # time interval, i.e. fps=20
-    anim.save('cartpole.mp4')
-    anim.save('cartpole.gif', writer='imagemagick')
+    anim.save(output)
 
 
 def display_frame_to_video_2(frames):

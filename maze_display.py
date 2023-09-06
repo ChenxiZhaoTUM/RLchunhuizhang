@@ -57,4 +57,3 @@ def play_process(state_history):
 
     anim = animation.FuncAnimation(fig, animate, init_func=init, frames=len(state_history), interval=200, repeat=False)
     anim.save('maze.mp4')
-
