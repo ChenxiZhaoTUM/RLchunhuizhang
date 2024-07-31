@@ -198,4 +198,4 @@ for episode in range(max_episodes):
         print(f'continue success (step > 195) more than 10 times')
 
 if learning_finish_flag:
-    display_frame_to_video(frames, output='./save/cartpole_DQN.mp4')
+    display_frame_to_video(frames, output='./save/cartpole_DQN.gif')

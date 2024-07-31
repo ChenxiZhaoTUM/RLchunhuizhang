@@ -57,6 +57,15 @@ class Agent:
             pi[r, :] = self.theta[r, :] / np.nansum(self.theta[r, :])  # discrete probability distribution
         return np.nan_to_num(pi)
 
+    # def _cvt_theta_to_pi(self):
+    #     m, n = self.theta.shape  # m is state, n is action
+    #     pi = np.zeros((m, n))  # policy pi
+    #     for r in range(m):
+    #         row_sum = np.nansum(self.theta[r, :])
+    #         if not np.isnan(row_sum) and row_sum != 0:
+    #             pi[r, :] = self.theta[r, :] / row_sum  # discrete probability distribution
+    #     return np.nan_to_num(pi)
+
     def get_action(self, s):
         if np.random.rand() < self.eps:
             action = np.random.choice(self.actions, p=self.pi[s, :])  # randomly choose by eps
@@ -81,6 +90,8 @@ env = MazeEnv()
 agent = Agent()
 done = False
 epoch = 0
+
+print(agent.Q)
 
 while True:
     old_Q = np.nanmax(agent.Q, axis=1)

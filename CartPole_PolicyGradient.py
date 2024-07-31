@@ -88,11 +88,19 @@ num_steps = []
 avg_num_steps = []
 all_rewards = []
 
+continue_success_episodes = 0
+learning_finish_flag = False
+frames = []
+
 for episode in range(max_episodes):
     state = env.reset()
     log_probs = []
     rewards = []
+
     for step in range(max_steps):
+        if learning_finish_flag:
+            frames.append((env.render(mode='rgb_array')))
+
         action, log_prob = policy_net.choose_action(state)
         next_state, reward, done, _ = env.step(action)
 
@@ -100,6 +108,11 @@ for episode in range(max_episodes):
         rewards.append(reward)
 
         if done:
+            if step < 195:
+                continue_success_episodes = 0
+            else:
+                continue_success_episodes += 1
+
             # 完成一次episode，得到一次完整的trajectory
             update_policy(policy_net, rewards, log_probs)
             num_steps.append(step)
@@ -112,7 +125,13 @@ for episode in range(max_episodes):
 
         state = next_state
 
-plt.plot(num_steps)
-plt.plot(avg_num_steps)
-plt.xlabel('episode')
-plt.show()
+    if learning_finish_flag:
+        break
+
+    if continue_success_episodes >= 10:
+        learning_finish_flag = True
+        print(f'continue success (step > 195) more than 10 times')
+
+
+if learning_finish_flag:
+    display_frame_to_video(frames, output='./save/cartpole_PolicyGradient.gif')
